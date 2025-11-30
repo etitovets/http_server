@@ -13,11 +13,17 @@ var message string
 
 func getRoot(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got / request\n")
-	io.WriteString(w, message)
+	if _, err := io.WriteString(w, message); err != nil {
+		fmt.Printf("error writing response: %s\n", err.Error())
+	}
 }
+
 func getHello(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got /hello request\n")
-	io.WriteString(w, "Hello, HTTP!\n")
+	if _, err := io.WriteString(w, "Hello, HTTP!\n"); err != nil {
+		fmt.Printf("error writing response: %s\n", err.Error())
+	}
+}
 }
 
 func main() {
