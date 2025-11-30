@@ -24,7 +24,6 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("error writing response: %s\n", err.Error())
 	}
 }
-}
 
 func main() {
 	flag.StringVar(&message, "m", "hello", "message")
