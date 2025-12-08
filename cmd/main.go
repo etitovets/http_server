@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
@@ -28,10 +29,18 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 func main() {
 	flag.StringVar(&message, "m", "hello", "message")
 	flag.Parse()
+
+	f, err := os.ReadFile("/cmd/config")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Loaded config: %s\n", f)
+
 	http.HandleFunc("/", getRoot)
 	http.HandleFunc("/hello", getHello)
 
-	err := http.ListenAndServe(":8081", nil)
+	err = http.ListenAndServe(":8081", nil)
 
 	if errors.Is(err, http.ErrServerClosed) {
 		fmt.Printf("server closed\n")

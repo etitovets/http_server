@@ -1,0 +1,27 @@
+services:
+  loadbalancer:
+    image: nginx
+    depends_on:
+      # - backend-A
+      backend-B:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+  backend-A:
+    image: application
+    scale: 3
+    command: ["-m", "Message from backeend-A"]
+  backend-B:
+    image: application-error
+    command: ["-m", "Message from backeend-B"]
+    volumes:
+      - ./test_config:/cmd/config
+    healthcheck:
+      test: ["CMD-SHELL", "cat", "/cmd/config"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
