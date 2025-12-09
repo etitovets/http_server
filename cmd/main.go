@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -15,16 +16,16 @@ import (
 var message string
 
 func getRoot(w http.ResponseWriter, r *http.Request) {
-	log.Printf("got / request\n")
+	fmt.Printf("got / request\n")
 	if _, err := io.WriteString(w, message); err != nil {
-		log.Printf("error writing response: %s\n", err.Error())
+		fmt.Printf("error writing response: %s\n", err.Error())
 	}
 }
 
 func getHello(w http.ResponseWriter, r *http.Request) {
-	log.Printf("got /hello request\n")
+	fmt.Printf("got /hello request\n")
 	if _, err := io.WriteString(w, "Hello, HTTP!\n"); err != nil {
-		log.Printf("error writing response: %s\n", err.Error())
+		fmt.Printf("error writing response: %s\n", err.Error())
 	}
 }
 
