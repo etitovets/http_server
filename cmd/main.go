@@ -39,7 +39,9 @@ func main() {
 	cfg.Net = "tcp"
 	cfg.Addr = "127.0.0.1:3306"
 	cfg.DBName = os.Getenv("DBNAME")
-
+	if cfg.User == "" || cfg.Passwd == "" || cfg.DBName == "" {
+		log.Fatal("DBUSER, DBPASS and DBNAME env vars must be set")
+	}
 	var err error
 	db, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
