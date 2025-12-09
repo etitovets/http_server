@@ -37,7 +37,7 @@ func main() {
 	cfg.User = os.Getenv("DBUSER")
 	cfg.Passwd = os.Getenv("DBPASS")
 	cfg.Net = "tcp"
-	cfg.Addr = "DBADDRESS"
+	cfg.Addr = os.Getenv("DBADDRESS")
 	cfg.DBName = os.Getenv("DBNAME")
 	if cfg.Addr == "" || cfg.User == "" || cfg.Passwd == "" || cfg.DBName == "" {
 		log.Fatal("DBADDRESS, DBUSER, DBPASS and DBNAME env vars must be set")
