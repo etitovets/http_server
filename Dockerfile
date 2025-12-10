@@ -4,7 +4,7 @@ ARG DATE=01.01.01
 ARG COMMIT=000
 WORKDIR /app
 COPY . .
-RUN GO111MODULE="on" CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o /app/http-server -ldflags  "-X main.buildVersion=${APP_VERSION} -X 'main.buildDate=${DATE}' -X 'main.buildCommit=${COMMIT}'" cmd/*.go
+RUN GO111MODULE="on" CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o /app/http-server -ldflags  "-X main.buildVersion=${APP_VERSION} -X 'main.buildDate=${DATE}' -X 'main.buildCommit=${COMMIT}'" ./...
 
 FROM alpine:3.18
 WORKDIR /app
