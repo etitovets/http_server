@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"flag"
 	"fmt"
@@ -8,6 +9,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/go-sql-driver/mysql"
 )
 
 var message string
@@ -36,16 +39,35 @@ func main() {
 	}
 
 	fmt.Printf("Loaded config: %s\n", f)
+	cfg := mysql.NewConfig()
+	cfg.User = os.Getenv("DBUSER")
+	cfg.Passwd = os.Getenv("DBPASS")
+	cfg.Net = "tcp"
+	cfg.Addr = os.Getenv("DBADDRESS")
+	cfg.DBName = os.Getenv("DBNAME")
+	if cfg.Addr == "" || cfg.User == "" || cfg.Passwd == "" || cfg.DBName == "" {
+		log.Fatal("DBADDRESS, DBUSER, DBPASS and DBNAME env vars must be set")
+	}
+
+	db, err = sql.Open("mysql", cfg.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
+	}
+	pingErr := db.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
 
 	http.HandleFunc("/", getRoot)
 	http.HandleFunc("/hello", getHello)
+	http.HandleFunc("/user", getUser)
 
 	err = http.ListenAndServe(":8081", nil)
 
 	if errors.Is(err, http.ErrServerClosed) {
-		fmt.Printf("server closed\n")
+		log.Printf("server closed\n")
 	} else if err != nil {
-		fmt.Printf("error starting server: %s\n", err)
+		log.Printf("error starting server: %s\n", err)
 		os.Exit(1)
 	}
 }

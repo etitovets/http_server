@@ -1,12 +1,10 @@
-FROM golang:1.20 as builder
+FROM golang:1.25 as builder
 ARG APP_VERSION=0.0.0
 ARG DATE=01.01.01
 ARG COMMIT=000
 WORKDIR /app
-COPY go.mod ./
-COPY ./cmd ./cmd
-RUN ls -la cmd/
-RUN GO111MODULE="on" CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o /app/http-server -ldflags  "-X main.buildVersion=${APP_VERSION} -X 'main.buildDate=${DATE}' -X 'main.buildCommit=${COMMIT}'" cmd/main.go
+COPY . .
+RUN GO111MODULE="on" CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o /app/http-server -ldflags  "-X main.buildVersion=${APP_VERSION} -X 'main.buildDate=${DATE}' -X 'main.buildCommit=${COMMIT}'" cmd/*.go
 
 FROM alpine:3.18
 WORKDIR /app
