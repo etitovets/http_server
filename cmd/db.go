@@ -18,7 +18,7 @@ type User struct {
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
-	log.Printf("got /hello request\n")
+	log.Printf("got /user request\n")
 	var user User
 	queryParams := r.URL.Query()
 	login := queryParams.Get("login")
